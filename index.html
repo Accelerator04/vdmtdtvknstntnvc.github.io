@@ -596,7 +596,7 @@
         <div class="footer-container">
             <div class="footer-buttons">
                 <button class="uid-button" id="uidButton">UID 728765572</button>
-                <a href="https://t.me/AcCalConsBot" target="_blank" class="telegram-button">Telegram</a>
+                <a href="https://t.me/AcceleratorCalculator" target="_blank" class="telegram-button">Telegram</a>
             </div>
         </div>
     </div>
@@ -647,22 +647,22 @@
                 
                 this.inputConfigs = {
                     base: [
-                        { id: 'charLevelInput', label: 'Уровень персонажа', min: 1, max: 100, step: 1, value: 90, placeholder: '1-100' },
-                        { id: 'enemyLevelInput', label: 'Уровень врага', min: 1, max: 150, step: 1, value: 95, placeholder: '1-150' },
-                        { id: 'enemyResInput', label: 'Резист врага %', min: -100, max: 100, step: 1, value: 10, placeholder: '-100 до 100' }
+                        { id: 'charLevelInput', label: 'Уровень персонажа', min: 1, max: 100, value: 90, placeholder: '1-100' },
+                        { id: 'enemyLevelInput', label: 'Уровень врага', min: 1, max: 150, value: 95, placeholder: '1-150' },
+                        { id: 'enemyResInput', label: 'Резист врага %', min: -100, max: 100, value: 10, placeholder: '-100 до 100' }
                     ],
                     external: [
-                        { id: 'flatScaleInput', label: '+ Скейл', min: 0, max: 10000, step: 10, value: 0, placeholder: '0-10000' },
-                        { id: 'emBonusInput', label: '+ МС', min: 0, max: 2000, step: 10, value: 0, placeholder: '0-2000' },
-                        { id: 'affixBonusInput', label: '+ Бонус урона %', min: 0, max: 200, step: 0.1, value: 0, placeholder: '0-200' }
+                        { id: 'flatScaleInput', label: '+ Скейл', min: 0, max: 10000, value: 0, placeholder: '0-10000' },
+                        { id: 'emBonusInput', label: '+ МС', min: 0, max: 2000, value: 0, placeholder: '0-2000' },
+                        { id: 'affixBonusInput', label: '+ Бонус урона %', min: 0, max: 200, value: 0, placeholder: '0-200' }
                     ],
                     internal: [
-                        { id: 'specialMultiplierInput', label: 'Специальный множитель %', min: 0, max: 500, step: 0.1, value: 100, placeholder: '0-500' },
-                        { id: 'flatDamageInput', label: '+ Добавочный урон', min: 0, max: 10000, step: 10, value: 0, placeholder: '0-10000' },
-                        { id: 'reactionBonusInput', label: 'Бонус реакции %', min: 0, max: 200, step: 0.1, value: 0, placeholder: '0-200' },
-                        { id: 'defReductionInput', label: 'Снижение защиты %', min: 0, max: 90, step: 1, value: 0, placeholder: '0-90' },
-                        { id: 'defIgnoreInput', label: 'Игнорирование защиты %', min: 0, max: 100, step: 1, value: 0, placeholder: '0-100' },
-                        { id: 'directMultiplierInput', label: 'Прямой множитель %', min: 0, max: 500, step: 0.1, value: 100, placeholder: '0-500' }
+                        { id: 'specialMultiplierInput', label: 'Специальный множитель %', min: 0, max: 500, value: 100, placeholder: '0-500' },
+                        { id: 'flatDamageInput', label: '+ Добавочный урон', min: 0, max: 10000, value: 0, placeholder: '0-10000' },
+                        { id: 'reactionBonusInput', label: 'Бонус реакции %', min: 0, max: 200, value: 0, placeholder: '0-200' },
+                        { id: 'defReductionInput', label: 'Снижение защиты %', min: 0, max: 90, value: 0, placeholder: '0-90' },
+                        { id: 'defIgnoreInput', label: 'Игнорирование защиты %', min: 0, max: 100, value: 0, placeholder: '0-100' },
+                        { id: 'directMultiplierInput', label: 'Прямой множитель %', min: 0, max: 500, value: 100, placeholder: '0-500' }
                     ]
                 };
                 
@@ -670,8 +670,8 @@
                     no_reaction: '<div class="reaction-icon">🚫</div>',
                     vaporize_reverse: '<div class="reaction-icon compact-emojis"><div class="emoji-grid"><div class="emoji-cell">🔥</div><div class="emoji-cell">💧</div><div class="emoji-cell">❄️</div><div class="emoji-cell">🔥</div></div></div>',
                     vaporize_forward: '<div class="reaction-icon compact-emojis"><div class="emoji-grid"><div class="emoji-cell">💧</div><div class="emoji-cell">🔥</div><div class="emoji-cell">🔥</div><div class="emoji-cell">❄️</div></div></div>',
-                    aggravate: '<div class="reaction-icon aggravate"><div class="aggravate-main">⚡️</div><div class="aggravate-small"><div>⚡️</div><div>🌱</div></div></div>',
-                    spread: '<div class="reaction-icon spread"><div class="spread-main">🌱</div><div class="spread-small"><div>⚡️</div><div>🌱</div></div></div>',
+                    aggravate: '<div class="reaction-icon">⚡️</div>',
+                    spread: '<div class="reaction-icon">🌱</div>',
                     moon_budding: '<div class="reaction-icon moon-budding">🌙</div>'
                 };
             }
@@ -686,6 +686,7 @@
             
             parseNumber(value, defaultValue = 0) {
                 if (value == null || value === '') return defaultValue;
+                value = value.toString().replace(',', '.');
                 const num = parseFloat(value);
                 return isNaN(num) ? defaultValue : num;
             }
@@ -745,9 +746,11 @@
                     item.className = containerId.includes('base') ? 'param-item' : 'bonus-input-container';
                     item.innerHTML = `
                         <div class="${containerId.includes('base') ? 'param-label' : 'bonus-label'}">${config.label}</div>
-                        <input type="number" class="${containerId.includes('base') ? 'param-input' : 'bonus-input'}" 
-                               id="${config.id}" min="${config.min}" max="${config.max}" step="${config.step}" 
-                               value="${config.value}" placeholder="${config.placeholder}">
+                        <input type="text" class="${containerId.includes('base') ? 'param-input' : 'bonus-input'}" 
+                               id="${config.id}" 
+                               value="${config.value}" 
+                               placeholder="${config.placeholder}"
+                               inputmode="decimal">
                     `;
                     container.appendChild(item);
                 });
@@ -773,25 +776,35 @@
                 if (!element) return;
                 
                 element.addEventListener('input', (e) => {
-                    const value = e.target.value;
+                    let value = e.target.value;
                     
-                    if (value === '') {
+                    value = value.replace(/[^0-9.,-]/g, '');
+                    
+                    if (value === '' || value === '-') {
                         this.state[this.getStateKey(inputId)] = 0;
-                        element.value = 0;
+                        element.value = value;
                         this.updateAllBuilds();
                         return;
                     }
                     
                     const numValue = this.parseNumber(value, 0);
                     this.state[this.getStateKey(inputId)] = numValue;
-                    element.value = numValue;
+                    
+                    element.value = value;
+                    
                     this.updateAllBuilds();
                 });
                 
                 element.addEventListener('blur', (e) => {
-                    if (e.target.value === '') {
-                        element.value = 0;
-                        this.state[this.getStateKey(inputId)] = 0;
+                    const value = e.target.value;
+                    if (value === '' || value === '-') {
+                        const defaultValue = this.inputConfigs.base.concat(
+                            this.inputConfigs.external, 
+                            this.inputConfigs.internal
+                        ).find(c => c.id === inputId)?.value || 0;
+                        
+                        element.value = defaultValue;
+                        this.state[this.getStateKey(inputId)] = defaultValue;
                         this.updateAllBuilds();
                     }
                 });
@@ -926,12 +939,12 @@
                         </div>
                     </div>
                     <div class="stats-grid">
-                        ${this.createStatInput(build.id, 'skillMultiplier', 'Множитель навыка %', build.values.skillMultiplier, 1, null, 1, true)}
-                        ${this.createStatInput(build.id, 'scale', 'Скейл', build.values.scale, 0, null, 10)}
-                        ${this.createStatInput(build.id, 'critRate', 'Крит Шанс %', build.values.critRate, 0, 100, 0.1)}
-                        ${this.createStatInput(build.id, 'critDmg', 'Крит Урон %', build.values.critDmg, 0, null, 0.1)}
-                        ${this.createStatInput(build.id, 'em', 'МС', build.values.em, 0, null, 1)}
-                        ${this.createStatInput(build.id, 'affixBonus', 'Бонус урона %', build.values.affixBonus, 0, null, 0.1)}
+                        ${this.createStatInput(build.id, 'skillMultiplier', 'Множитель навыка %', build.values.skillMultiplier, true)}
+                        ${this.createStatInput(build.id, 'scale', 'Скейл', build.values.scale)}
+                        ${this.createStatInput(build.id, 'critRate', 'Крит Шанс %', build.values.critRate)}
+                        ${this.createStatInput(build.id, 'critDmg', 'Крит Урон %', build.values.critDmg)}
+                        ${this.createStatInput(build.id, 'em', 'МС', build.values.em)}
+                        ${this.createStatInput(build.id, 'affixBonus', 'Бонус урона %', build.values.affixBonus)}
                     </div>
                     <div class="damage-results">
                         <div class="damage-title" id="damageTitle-${build.id}">${this.REACTIONS[this.state.currentReaction].name.toUpperCase()}</div>
@@ -956,14 +969,14 @@
                         </div>
                     </div>
                     <div class="stats-grid">
-                        ${this.createStatInput(build.id, 'skillMultiplier1', 'Множитель навыка №1 %', build.values.skillMultiplier1, 1, null, 1, true)}
-                        ${this.createStatInput(build.id, 'skillMultiplier2', 'Множитель навыка №2 %', build.values.skillMultiplier2, 1, null, 1, true)}
-                        ${this.createStatInput(build.id, 'scale1', 'Скейл №1', build.values.scale1, 0, null, 10)}
-                        ${this.createStatInput(build.id, 'scale2', 'Скейл №2', build.values.scale2, 0, null, 10)}
-                        ${this.createStatInput(build.id, 'critRate', 'Крит Шанс %', build.values.critRate, 0, 100, 0.1)}
-                        ${this.createStatInput(build.id, 'critDmg', 'Крит Урон %', build.values.critDmg, 0, null, 0.1)}
-                        ${this.createStatInput(build.id, 'em', 'МС', build.values.em, 0, null, 1)}
-                        ${this.createStatInput(build.id, 'affixBonus', 'Бонус урона %', build.values.affixBonus, 0, null, 0.1)}
+                        ${this.createStatInput(build.id, 'skillMultiplier1', 'Множитель навыка №1 %', build.values.skillMultiplier1, true)}
+                        ${this.createStatInput(build.id, 'skillMultiplier2', 'Множитель навыка №2 %', build.values.skillMultiplier2, true)}
+                        ${this.createStatInput(build.id, 'scale1', 'Скейл №1', build.values.scale1)}
+                        ${this.createStatInput(build.id, 'scale2', 'Скейл №2', build.values.scale2)}
+                        ${this.createStatInput(build.id, 'critRate', 'Крит Шанс %', build.values.critRate)}
+                        ${this.createStatInput(build.id, 'critDmg', 'Крит Урон %', build.values.critDmg)}
+                        ${this.createStatInput(build.id, 'em', 'МС', build.values.em)}
+                        ${this.createStatInput(build.id, 'affixBonus', 'Бонус урона %', build.values.affixBonus)}
                     </div>
                     <div class="damage-results">
                         <div class="damage-title" id="damageTitle-${build.id}">${this.REACTIONS[this.state.currentReaction].name.toUpperCase()}</div>
@@ -976,16 +989,14 @@
                 `;
             }
             
-            createStatInput(buildId, type, label, value, min, max, step, isSkill = false) {
+            createStatInput(buildId, type, label, value, isSkill = false) {
                 return `
                     <div class="stat-item">
                         <div class="stat-label">${label}</div>
-                        <input type="number" class="stat-input ${isSkill ? 'skill-input' : ''}" 
+                        <input type="text" class="stat-input ${isSkill ? 'skill-input' : ''}" 
                                data-build="${buildId}" data-type="${type}" 
                                value="${value}" 
-                               ${min !== null ? `min="${min}"` : ''} 
-                               ${max !== null ? `max="${max}"` : ''} 
-                               step="${step}">
+                               inputmode="decimal">
                     </div>
                 `;
             }
@@ -1032,10 +1043,12 @@
                     const defaultValue = this.getDefaultValue(type);
                     
                     input.addEventListener('input', (e) => {
-                        const value = e.target.value;
+                        let value = e.target.value;
+                        
+                        value = value.replace(/[^0-9.,]/g, '');
                         
                         if (value === '') {
-                            input.value = 0;
+                            input.value = '';
                             const build = this.state.builds.find(b => b.id === buildId);
                             if (build) {
                                 build.values[type] = 0;
@@ -1052,7 +1065,7 @@
                             if (numValue < 0) numValue = 0;
                         }
                         
-                        input.value = numValue;
+                        input.value = value;
                         const build = this.state.builds.find(b => b.id === buildId);
                         if (build) {
                             build.values[type] = numValue;
@@ -1061,11 +1074,13 @@
                     });
                     
                     input.addEventListener('blur', (e) => {
-                        if (e.target.value === '') {
-                            input.value = 0;
+                        const value = e.target.value;
+                        if (value === '') {
+                            const defaultValue = this.getDefaultValue(type);
+                            input.value = defaultValue;
                             const build = this.state.builds.find(b => b.id === buildId);
                             if (build) {
-                                build.values[type] = 0;
+                                build.values[type] = defaultValue;
                                 this.calculateBuildDamage(buildId);
                             }
                         }
@@ -1430,17 +1445,6 @@
                 setTimeout(() => {
                     this.addBuild();
                 }, 100);
-            }
-            
-            getDefaultStateValue(key) {
-                const defaults = {
-                    globalCharLevel: 90, globalEnemyLevel: 95, globalEnemyRes: 10,
-                    flatScaleBonus: 0, emBonus: 0, affixBonusBonus: 0,
-                    specialMultiplier: 100, flatDamageBonus: 0, reactionBonus: 0,
-                    defReduction: 0, defIgnore: 0, directMultiplier: 100,
-                    dualScaleMode: false, currentReaction: 'no_reaction'
-                };
-                return defaults[key] || 0;
             }
         }
     </script>
